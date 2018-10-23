@@ -31,8 +31,10 @@ public class controlActivity extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     private ViewPager mViewPager;
 
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
 
@@ -44,12 +46,11 @@ public class controlActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(true);
                 int itemId = item.getItemId();
-                if(itemId == R.id.books){
-                    Toast.makeText(getApplicationContext(),"Books selected",Toast.LENGTH_SHORT).show();
+                if (itemId == R.id.books) {
+                    Toast.makeText(getApplicationContext(), "Books selected", Toast.LENGTH_SHORT).show();
 
-                }
-                else if(itemId == R.id.author){
-                    Toast.makeText(getApplicationContext(),"Author selected",Toast.LENGTH_SHORT).show();
+                } else if (itemId == R.id.author) {
+                    Toast.makeText(getApplicationContext(), "Author selected", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -65,8 +66,8 @@ public class controlActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
+//
+//        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -111,25 +112,19 @@ public class controlActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-
+           Fragment fragment = null;
+            switch (position){
                 case 0:
-                    Tab1 t1 = new Tab1();
-                    return t1;
-
+                     fragment = new Tab1();
+                     break;
                 case 1:
-                    Tab2 t2 = new Tab2();
-                    return t2;
-
+                    fragment = new Tab2();
+                    break;
                 case 2:
-                    Tab3 t3 = new Tab3();
-                    return t3;
-
+                    fragment = new Tab3();
+                    break;
             }
-
-            return null;
+            return fragment;
         }
 
         @Override
@@ -137,5 +132,6 @@ public class controlActivity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+
     }
 }
