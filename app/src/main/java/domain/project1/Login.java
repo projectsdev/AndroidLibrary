@@ -77,7 +77,7 @@ public class Login extends AppCompatActivity {
                     boolean success = object.getBoolean("success");
                     if(success){
                         JSONObject details = object.getJSONObject("details");
-                        Intent intent = new Intent(Login.this, MainScreen.class);
+                        Intent intent = new Intent(Login.this, controlActivity.class);
                         startActivity(intent);
                         finish();
                     }
