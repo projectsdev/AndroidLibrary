@@ -41,13 +41,15 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:layout_marginStart="8dp"
         android:ems="10"
         android:hint="Date of Birth"
         android:inputType="textPersonName"
         android:textAlignment="center"
         android:textSize="16sp"
         app:layout_constraintBottom_toTopOf="@+id/loginbutton"
-        tools:layout_editor_absoluteX="97dp" />
+        app:layout_constraintEnd_toEndOf="@+id/username"
+        app:layout_constraintStart_toStartOf="@+id/username" />
 
     <Button
         android:id="@+id/loginbutton"
