@@ -11,15 +11,15 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".Home" />
-        <activity android:name=".Login" />
-        <activity android:name=".Tab1" />
-        <activity android:name=".Tab2" />
-        <activity android:name=".Tab3" />
+
+        <activity android:name=".Home"></activity>
+        <activity android:name=".Login">
+
+        </activity>
         <activity
             android:name=".controlActivity"
             android:label="@string/title_activity_control"
-            android:theme="@style/AppTheme">
+            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

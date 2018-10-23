@@ -31,23 +31,20 @@ public class Login extends AppCompatActivity {
     Context context;
     String uname = null,pass = null;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_login);
 
-        username = (EditText)findViewById(R.id.username);
-        password = (EditText)findViewById(R.id.password);
-        login = (Button)findViewById(R.id.loginbutton);
+        username = findViewById(R.id.username);
+        password = findViewById(R.id.password);
+        login = findViewById(R.id.loginbutton);
         context = this;
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-
                 uname = username.getText().toString();
                 pass = password.getText().toString();
-
                 if(uname.isEmpty()){
                     username.setError("Username cannot be empty");
                     username.requestFocus();

@@ -30,24 +30,13 @@ import android.widget.Toast;
 public class controlActivity extends AppCompatActivity {
 
     private DrawerLayout drawerLayout;
-
-    /**
-     * The {@link android.support.v4.view.PagerAdapter} that will provide
-     * fragments for each of the sections. We use a
-     * {@link FragmentPagerAdapter} derivative, which will keep every
-     * loaded fragment in memory. If this becomes too memory intensive, it
-     * may be best to switch to a
-     * {@link android.support.v4.app.FragmentStatePagerAdapter}.
-     */
     private SectionsPagerAdapter mSectionsPagerAdapter;
-
-    /**
-     * The {@link ViewPager} that will host the section contents.
-     */
     private ViewPager mViewPager;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_control);
 
@@ -59,12 +48,11 @@ public class controlActivity extends AppCompatActivity {
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 item.setChecked(true);
                 int itemId = item.getItemId();
-                if(itemId == R.id.books){
-                    Toast.makeText(getApplicationContext(),"Books selected",Toast.LENGTH_SHORT).show();
+                if (itemId == R.id.books) {
+                    Toast.makeText(getApplicationContext(), "Books selected", Toast.LENGTH_SHORT).show();
 
-                }
-                else if(itemId == R.id.author){
-                    Toast.makeText(getApplicationContext(),"Author selected",Toast.LENGTH_SHORT).show();
+                } else if (itemId == R.id.author) {
+                    Toast.makeText(getApplicationContext(), "Author selected", Toast.LENGTH_SHORT).show();
 
                 }
 
@@ -81,8 +69,8 @@ public class controlActivity extends AppCompatActivity {
         // Create the adapter that will return a fragment for each of the three
         // primary sections of the activity.
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-
-        // Set up the ViewPager with the sections adapter.
+//
+//        // Set up the ViewPager with the sections adapter.
         mViewPager = (ViewPager) findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
 
@@ -124,45 +112,6 @@ public class controlActivity extends AppCompatActivity {
         return super.onOptionsItemSelected(item);
     }
 
-    /**
-     * A placeholder fragment containing a simple view.
-     */
-    public static class PlaceholderFragment extends Fragment {
-        /**
-         * The fragment argument representing the section number for this
-         * fragment.
-         */
-        private static final String ARG_SECTION_NUMBER = "section_number";
-
-        public PlaceholderFragment() {
-        }
-
-        /**
-         * Returns a new instance of this fragment for the given section
-         * number.
-         */
-        public static PlaceholderFragment newInstance(int sectionNumber) {
-            PlaceholderFragment fragment = new PlaceholderFragment();
-            Bundle args = new Bundle();
-            args.putInt(ARG_SECTION_NUMBER, sectionNumber);
-            fragment.setArguments(args);
-            return fragment;
-        }
-
-        @Override
-        public View onCreateView(LayoutInflater inflater, ViewGroup container,
-                                 Bundle savedInstanceState) {
-            View rootView = inflater.inflate(R.layout.fragment_control, container, false);
-            TextView textView = (TextView) rootView.findViewById(R.id.section_label);
-            textView.setText(getString(R.string.section_format, getArguments().getInt(ARG_SECTION_NUMBER)));
-            return rootView;
-        }
-    }
-
-    /**
-     * A {@link FragmentPagerAdapter} that returns a fragment corresponding to
-     * one of the sections/tabs/pages.
-     */
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
 
         public SectionsPagerAdapter(FragmentManager fm) {
@@ -171,25 +120,19 @@ public class controlActivity extends AppCompatActivity {
 
         @Override
         public Fragment getItem(int position) {
-            // getItem is called to instantiate the fragment for the given page.
-            // Return a PlaceholderFragment (defined as a static inner class below).
-            switch (position) {
-
+           Fragment fragment = null;
+            switch (position){
                 case 0:
-                    Tab1 t1 = new Tab1();
-                    return t1;
-
+                     fragment = new Tab1();
+                     break;
                 case 1:
-                    Tab2 t2 = new Tab2();
-                    return t2;
-
+                    fragment = new Tab2();
+                    break;
                 case 2:
-                    Tab3 t3 = new Tab3();
-                    return t3;
-
+                    fragment = new Tab3();
+                    break;
             }
-
-            return null;
+            return fragment;
         }
 
         @Override
@@ -197,5 +140,6 @@ public class controlActivity extends AppCompatActivity {
             // Show 3 total pages.
             return 3;
         }
+
     }
 }
