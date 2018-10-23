@@ -28,9 +28,7 @@ public class Tab1 extends Fragment {
 
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-////    protected void onCreate(Bundle savedInstanceState) {
-////        super.onCreate(savedInstanceState);
-////        setContentView(R.layout.activity_tab1);
+
         View Tab1View = inflater.inflate(R.layout.activity_tab1,container,false);
         recyclerView = Tab1View.findViewById(R.id.recyclerview);
         no_data = Tab1View.findViewById(R.id.textView5);
@@ -39,6 +37,6 @@ public class Tab1 extends Fragment {
         adapter = new HomeRecyclerViewAdapter();
         recyclerView.setAdapter(adapter);
         return Tab1View;
-//    }
+
     }
 }
