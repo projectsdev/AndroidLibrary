@@ -1,5 +1,6 @@
 package domain.project1;
 
+import android.content.Context;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,7 +28,7 @@ public class Login extends AppCompatActivity {
 
     EditText username,password;
     Button login;
-
+    Context context;
     String uname = null,pass = null;
 
 
@@ -39,7 +40,7 @@ public class Login extends AppCompatActivity {
         username = (EditText)findViewById(R.id.username);
         password = (EditText)findViewById(R.id.password);
         login = (Button)findViewById(R.id.loginbutton);
-
+        context = this;
         login.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -52,12 +53,12 @@ public class Login extends AppCompatActivity {
                     username.requestFocus();
                     return;
                 }
-                if(pass.isEmpty()){
+                else if(pass.isEmpty()){
                     password.setError("Password cannot be empty");
                     password.requestFocus();
                     return;
                 }
-
+                else
                 signin();
             }
         });
@@ -65,38 +66,43 @@ public class Login extends AppCompatActivity {
 
     private void signin() {
 
-        String uri = "Hi";
+        String url = new getUrl().setUrl("login");
         RequestQueue queue = Volley.newRequestQueue(this);
 
-        StringRequest stringRequest = new StringRequest(Request.Method.POST, uri, new Response.Listener<String>() {
+        StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
             @Override
             public void onResponse(String response) {
-                if (response.equals("Success")) {
-                    //Go to next page
-                    Intent intent = new Intent(Login.this, MainScreen.class);
-                    startActivity(intent);
-                    finish();
-                } else {
-                    Toast.makeText(getApplicationContext(), "Recheck Username and Password", Toast.LENGTH_LONG).show();
+                try {
+                    JSONObject object = new JSONObject(response);
+                    boolean success = object.getBoolean("success");
+                    if(success){
+                        JSONObject details = object.getJSONObject("details");
+                        Intent intent = new Intent(Login.this, MainScreen.class);
+                        startActivity(intent);
+                        finish();
+                    }
+                    else{
+                        String message = object.getString("reason");
+                        Toast.makeText(context,message,Toast.LENGTH_SHORT).show();
+                    }
+                }
+                catch (Exception e){
+                    e.printStackTrace();
                 }
             }
         }, new Response.ErrorListener() {
             @Override
             public void onErrorResponse(VolleyError error) {
-                Toast.makeText(getApplicationContext(), "Connection Error", Toast.LENGTH_SHORT).show();
+                Toast.makeText(context, "Connection Error", Toast.LENGTH_SHORT).show();
             }
         }){
             @Override
             public byte[] getBody() throws AuthFailureError{
                 JSONObject body = new JSONObject();
                 try {
-                    body.put("Username",uname);
-                } catch (JSONException e) {
-                    e.printStackTrace();
-                }
-                try {
-                    body.put("Password",pass);
-                } catch (JSONException e) {
+                    body.put("admission_number", uname);
+                    body.put("password", pass);
+                } catch (Exception e) {
                     e.printStackTrace();
                 }
 
