@@ -36,7 +36,6 @@ public class Tab1 extends Fragment {
         if(Tab1View == null ){
         Tab1View = inflater.inflate(R.layout.activity_tab1,container,false);
         recyclerView = Tab1View.findViewById(R.id.recycle);
-
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(context));
         recyclerView.setAdapter(adapter);
