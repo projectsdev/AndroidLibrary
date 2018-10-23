@@ -34,8 +34,13 @@ public class MainScreen extends AppCompatActivity {
     private SectionsPagerAdapter mSectionsPagerAdapter;
     TabLayout tabLayout;
     CoordinatorLayout drawerLayout;
-    private ViewPager mViewPager;
+    android.support.v7.app.ActionBarDrawerToggle mdrawerToggle;
 
+    /**
+     * The {@link ViewPager} that will host the section contents.
+     */
+    private ViewPager mViewPager;
+     NavigationView navigationView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -49,6 +54,8 @@ public class MainScreen extends AppCompatActivity {
 
 //        configureNavigationDrawer();
         configureToolbar();
+        configureNavigationDrawer();
+//        configureToolbar();
 
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
 
@@ -85,8 +92,9 @@ public class MainScreen extends AppCompatActivity {
     }
 
     private void configureNavigationDrawer() {
-        drawerLayout = findViewById(R.id.main_content);
-        NavigationView navigationView = findViewById(R.id.navigation);
+        drawerLayout =  findViewById(R.id.main_content);
+        navigationView = (NavigationView)findViewById(R.id.navigation);
+
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
@@ -96,9 +104,11 @@ public class MainScreen extends AppCompatActivity {
 
                 if(itemId == R.id.books){
                     Toast.makeText(getApplicationContext(),"Books selected",Toast.LENGTH_SHORT).show();
+
                 }
                 else if(itemId == R.id.author){
                     Toast.makeText(getApplicationContext(),"Author selected",Toast.LENGTH_SHORT).show();
+
                 }
                 if(f!= null){
                     FragmentTransaction transaction = getSupportFragmentManager().beginTransaction();
@@ -110,6 +120,7 @@ public class MainScreen extends AppCompatActivity {
             }
         });
     }
+
 
 
     @Override
