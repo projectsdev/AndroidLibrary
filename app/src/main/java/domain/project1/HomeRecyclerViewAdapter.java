@@ -2,11 +2,14 @@ package domain.project1;
 
 import android.content.Context;
 import android.support.v7.widget.RecyclerView;
+import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.ArrayList;
 
 public class HomeRecyclerViewAdapter extends /*BaseAdapter{
 
@@ -52,8 +55,10 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
    RecyclerView.Adapter<HomeRecyclerViewAdapter.HomeHolder> {
 
     Context context;
-    public HomeRecyclerViewAdapter(Context context) {
+    ArrayList<BookDetails> books;
+    public HomeRecyclerViewAdapter(Context context,ArrayList<BookDetails> books) {
         this.context = context;
+        this.books = books;
     }
 
     @Override
@@ -65,7 +70,12 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
 
     @Override
     public void onBindViewHolder(final HomeHolder holder, int position) {
-
+        BookDetails book = books.get(position);
+        holder.book_name.setText(book.getBook_name());
+        holder.author_name.setText("Author : "+book.getAuthor());
+        holder.published.setText("Published Year : "+book.getPublished_year());
+        holder.available.setText(Html.fromHtml("Available : <font color=#4eb175>"+book.getAvailable()+"</font>"));
+        holder.book_image.setImageResource(R.drawable.book);
     }
 
     @Override
@@ -74,7 +84,7 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
     }
     @Override
     public int getItemCount() {
-        return 5;
+        return books.size();
     }
 
 
@@ -87,11 +97,11 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
         ImageView book_image;
         public HomeHolder(View convertView) {
             super(convertView);
-//            book_image = convertView.findViewById(R.id.book);
-//            book_name = convertView.findViewById(R.id.bookname);
-//            author_name = convertView.findViewById(R.id.author);
-//            published = convertView.findViewById(R.id.published);
-//            available = convertView.findViewById(R.id.available);
+            book_image = convertView.findViewById(R.id.book);
+            book_name = convertView.findViewById(R.id.bookname);
+            author_name = convertView.findViewById(R.id.author);
+            published = convertView.findViewById(R.id.published);
+            available = convertView.findViewById(R.id.available);
         }
     }
 }

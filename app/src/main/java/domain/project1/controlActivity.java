@@ -70,6 +70,13 @@ public class controlActivity extends AppCompatActivity {
                     Toast.makeText(getApplicationContext(), "Author selected", Toast.LENGTH_SHORT).show();
 
                 }
+                else  if (itemId == R.id.logout) {
+                    Intent obj = new Intent(controlActivity.this,Login.class);
+                    obj.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP).addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK).addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                    startActivity(obj);
+                    getSharedPreferences("UserDetails",Context.MODE_PRIVATE).edit().putBoolean("autologin",false).commit();
+                    finish();
+                }
                 return false;
             }
         });
@@ -112,12 +119,7 @@ public class controlActivity extends AppCompatActivity {
             drawerLayout.openDrawer(GravityCompat.START);
             return true;
         }
-        //noinspection SimplifiableIfStatement
-//        if (id == R.id.action_settings) {
-//            Intent obj = new Intent(controlActivity.this,Login.class);
-//            startActivity(obj);
-//            finish();
-//        }
+
 
         return super.onOptionsItemSelected(item);
     }

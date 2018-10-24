@@ -80,7 +80,4 @@
         app:headerLayout="@layout/nav_header"/>
 
 
-
-
-
 </android.support.v4.widget.DrawerLayout>

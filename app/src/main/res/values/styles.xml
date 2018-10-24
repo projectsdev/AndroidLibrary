@@ -7,12 +7,8 @@
         <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
         <item name="colorAccent">#ffffff</item>
     </style>
-    <style name="progress" parent="ThemeOverlay.AppCompat.Dark.ActionBar" >
-        <item name="colorAccent">#4eb175</item>
-        <item name="colorPrimary">#4eb175</item>
-        <item name="colorPrimaryDark">#4eb175</item>
+    <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 
-    </style>
 
 
 </resources>
