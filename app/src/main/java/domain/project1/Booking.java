@@ -1,113 +1,157 @@
 package domain.project1;
 
+import android.content.Context;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 
+import com.android.volley.AuthFailureError;
+import com.android.volley.Request;
+import com.android.volley.RequestQueue;
+import com.android.volley.Response;
+import com.android.volley.VolleyError;
+import com.android.volley.toolbox.StringRequest;
+import com.android.volley.toolbox.Volley;
+
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
 
 public class Booking extends AppCompatActivity {
 
     Spinner course,dept,sem,sub;
     Button find;
-    String [] courses;
-    HashMap<String,String[]> semester = new HashMap<>();
-    HashMap<String,String[]> department = new HashMap<>();
-    HashMap<String,String[]> subject = new HashMap<>();
+    Context context;
+    String courses[],depts[];
+    int inc = 0;
+    String flagCourse,flagDept;
+    ArrayList<String> semesters = new ArrayList<>();
+    HashMap<String,HashMap<String,ArrayList<String>>> map = new HashMap<>();
+    HashMap<String,ArrayList<String>> subvalues = new HashMap<>();
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        context = this;
         setContentView(R.layout.activity_booking);
         course = findViewById(R.id.courseSpinner);
         dept = findViewById(R.id.departmentSpinner);
         sem = findViewById(R.id.semesterSpinner);
         sub = findViewById(R.id.subjectSpinner);
+        find = findViewById(R.id.find);
+        getCourses();
+    }
+    void getCourses(){
 
-        courses = new String[]{"B.Tech", "M.Tech", "MBA"};
-        semester.put(courses[0],new String[]{"S1","S2","S3","S4","S5","S6","S7","S8"});
-        semester.put(courses[1],new String[]{"S1","S2","S3","S4"});
-        semester.put(courses[2],new String[]{"S1","S2","S3","S4"});
+        String url = new getUrl().setUrl("getCourses");
+        RequestQueue queue = Volley.newRequestQueue(context);
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
+                new Response.Listener<String>() {
+                    @Override
+                    public void onResponse(String response) {
+                        try {
+                            Log.d("Response",response);
+                            JSONObject first = new JSONObject(response);
+                            int fetch = first.getInt("fetch");
+                            if(fetch == 1) {
+                                JSONObject second = first.getJSONObject("snapshot");
+                                Iterator<?> iterator1 = second.keys();
+                                while (iterator1.hasNext()) {
+                                    String c = (String) iterator1.next();
+                                    JSONObject third = first.getJSONObject("snapshot").getJSONObject(c);
+                                    Iterator<?> iterator2 = third.keys();
+                                    subvalues = new HashMap<>();
+                                    while (iterator2.hasNext()) {
+                                        semesters = new ArrayList<>();
+                                        String de = (String) iterator2.next();
+                                        int semvalue = third.getJSONObject(de).getInt("Semesters");
+                                        int i = 1;
+                                        while (i <= semvalue) {
+                                            semesters.add("S" + i);
+                                            i++;
+                                        }
+                                        subvalues.put(de, semesters);
+                                        map.put(c, subvalues);
+                                    }
+                                }
+                                Log.d("After Iteration", semesters.toString());
+                                courses = new String[map.size()];
+                                for (Map.Entry<String, HashMap<String, ArrayList<String>>> entry : map.entrySet()) {
+                                    courses[inc++] = entry.getKey();
+                                }
+                                setSpinners();
+                            }
 
-        department.put(courses[0],new String[]{"CSE","ME","EC"});
-        department.put(courses[1],new String[]{"CSE","EC"});
-        department.put(courses[2],new String[]{"Marketing","Management"});
-        
-        subjectAdd();
+                        } catch (Exception e) {
+                            e.printStackTrace();
+                        }
+                    }
+                }
+                ,
+                new Response.ErrorListener() {
+                    @Override
+                    public void onErrorResponse(VolleyError error) {
+                    }
+                }
+        ) {
+            @Override
+            public byte[] getBody() throws AuthFailureError {
+                JSONObject body = new JSONObject();
+                try {
 
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+                return body.toString().getBytes();
+            }
 
-
+            @Override
+            public String getBodyContentType() {
+                return "application/json";
+            }
+        };
+        queue.add(postRequest);
     }
 
-    private void subjectAdd() {
+    void setSpinners(){
+        course.setAdapter(new ArrayAdapter<>(context,R.layout.support_simple_spinner_dropdown_item,courses));
+        course.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                flagCourse = (String) adapterView.getItemAtPosition(position);
+                int size = map.get(flagCourse).size();
+                depts = new String[size];
+                int m = 0;
+                for (Map.Entry<String, ArrayList<String>> entry : map.get(adapterView.getItemAtPosition(position)).entrySet()) {
+                   depts[m++] = entry.getKey();
+                }
+                dept.setAdapter(new ArrayAdapter<>(context,R.layout.support_simple_spinner_dropdown_item,depts));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-        //BTECH
+            }
+        });
+        dept.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> adapterView, View view, int position, long l) {
+                flagDept = (String) adapterView.getItemAtPosition(position);
+                semesters = map.get(flagCourse).get(flagDept);
+                sem.setAdapter(new ArrayAdapter<>(context,R.layout.support_simple_spinner_dropdown_item,semesters));
+            }
+            @Override
+            public void onNothingSelected(AdapterView<?> adapterView) {
 
-        subject.put("B.Tech_CSE_S1",new String[]{"Maths","Chemistry"});
-        subject.put("B.Tech_ME_S1",new String[]{"Maths","Chemistry"});
-        subject.put("B.Tech_EC_S1",new String[]{"Maths","Chemistry"});
-
-        subject.put("B.Tech_CSE_S2",new String[]{"Physics","FCPC"});
-        subject.put("B.Tech_ME_S2",new String[]{"Physics","BME"});
-        subject.put("B.Tech_EC_S2",new String[]{"Physics","Electonics"});
-
-        subject.put("B.Tech_CSE_S3",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_ME_S3",new String[]{"CAD","Maths"});
-        subject.put("B.Tech_EC_S3",new String[]{"Signals","Maths"});
-
-        subject.put("B.Tech_CSE_S4",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_ME_S4",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_EC_S4",new String[]{"Data Structure","Maths"});
-
-        subject.put("B.Tech_CSE_S5",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_ME_S5",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_EC_S5",new String[]{"Data Structure","Maths"});
-
-        subject.put("B.Tech_CSE_S6",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_ME_S6",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_EC_S6",new String[]{"Data Structure","Maths"});
-
-        subject.put("B.Tech_CSE_S7",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_ME_S7",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_EC_S7",new String[]{"Data Structure","Maths"});
-
-        subject.put("B.Tech_CSE_S8",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_CSE_S8",new String[]{"Data Structure","Maths"});
-        subject.put("B.Tech_CSE_S8",new String[]{"Data Structure","Maths"});
-
-        //BTECH END
-
-        //MTECH
-
-        subject.put("M.Tech_CSE_S1",new String[]{"Mtech1","Mtech2"});
-        subject.put("M.Tech_EC_S1",new String[]{"Mtech1","Mtech2"});
-
-        subject.put("M.Tech_CSE_S2",new String[]{"Mtech1","Mtech2"});
-        subject.put("M.Tech_EC_S2",new String[]{"Mtech1","Mtech2"});
-
-        subject.put("M.Tech_CSE_S3",new String[]{"Mtech1","Mtech2"});
-        subject.put("M.Tech_EC_S3",new String[]{"Mtech1","Mtech2"});
-
-        subject.put("M.Tech_CSE_S4",new String[]{"Mtech1","Mtech2"});
-        subject.put("M.Tech_EC_S4",new String[]{"Mtech1","Mtech2"});
-
-        //MTECH END
-
-        //MBA
-
-        subject.put("MBA_Marketing_S1",new String[]{"MBA1","MBA2"});
-        subject.put("MBA_Management_S1",new String[]{"MBA1","MBA2"});
-
-        subject.put("MBA_Marketing_S2",new String[]{"MBA1","MBA2"});
-        subject.put("MBA_Management_S2",new String[]{"MBA1","MBA2"});
-
-        subject.put("MBA_Marketing_S3",new String[]{"MBA1","MBA2"});
-        subject.put("MBA_Management_S3",new String[]{"MBA1","MBA2"});
-
-        subject.put("MBA_Marketing_S4",new String[]{"MBA1","MBA2"});
-        subject.put("MBA_Management_S4",new String[]{"MBA1","MBA2"});
-
-        //MBA END
+            }
+        });
     }
+
 }
 

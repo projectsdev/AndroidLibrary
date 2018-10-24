@@ -65,6 +65,8 @@ public class controlActivity extends AppCompatActivity {
                 int itemId = item.getItemId();
                 if (itemId == R.id.books) {
                     Toast.makeText(getApplicationContext(), "Books selected", Toast.LENGTH_SHORT).show();
+                    Intent Booking = new Intent(context,Booking.class);
+                    startActivity(Booking);
 
                 } else if (itemId == R.id.author) {
                     Toast.makeText(getApplicationContext(), "Author selected", Toast.LENGTH_SHORT).show();
