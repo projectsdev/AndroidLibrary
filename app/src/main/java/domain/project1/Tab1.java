@@ -94,10 +94,13 @@ public class Tab1 extends Fragment {
                                 Iterator<?> keys = oj.keys();
                                 while (keys.hasNext()){
                                     String key = (String)keys.next();
-                                    JSONObject obj = oj.getJSONObject(key);
-                                    String book_name = obj.getString("book_name");
-                                    if(book_name.length()>=10) {
-                                        BookDetails d = new BookDetails(key, book_name, course,
+                                    JSONObject ob = oj.getJSONObject(key);
+                                    Iterator<?> k = ob.keys();
+                                    while (k.hasNext()) {
+                                        String key2 = (String)k.next();
+                                        JSONObject obj = ob.getJSONObject(key2);
+                                        String book_name = obj.getString("book_name");
+                                        BookDetails d = new BookDetails(key2, book_name, course,
                                                 dept, obj.getString("author"), obj.getString("semester"),
                                                 obj.getBoolean("renewable"), obj.getInt("volume"),
                                                 obj.getInt("available"), obj.getInt("published"));
@@ -127,6 +130,7 @@ public class Tab1 extends Fragment {
                 try {
                     body.put("course",course);
                     body.put("dept",dept);
+                    body.put("flag",0); // 0 for home contents
                 } catch (Exception e) {
                     e.printStackTrace();
                 }

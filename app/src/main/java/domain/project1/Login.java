@@ -92,6 +92,7 @@ public class Login extends AppCompatActivity {
                     boolean success = object.getBoolean("success");
                     if(success){
                         JSONObject details = object.getJSONObject("details");
+                        editor.putString("admission_no",uname.toUpperCase());
                         editor.putString("name",details.getString("name"));
                         editor.putString("course",details.getString("course"));
                         editor.putString("department",details.getString("department"));

@@ -1,6 +1,7 @@
 package domain.project1;
 
 import android.content.Context;
+import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -36,6 +37,7 @@ public class Booking extends AppCompatActivity {
     ArrayList<String> semesters = new ArrayList<>();
     HashMap<String,HashMap<String,ArrayList<String>>> map = new HashMap<>();
     HashMap<String,ArrayList<String>> subvalues = new HashMap<>();
+    Intent intent;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,9 +46,18 @@ public class Booking extends AppCompatActivity {
         course = findViewById(R.id.courseSpinner);
         dept = findViewById(R.id.departmentSpinner);
         sem = findViewById(R.id.semesterSpinner);
-        sub = findViewById(R.id.subjectSpinner);
         find = findViewById(R.id.find);
         getCourses();
+        find.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                intent = new Intent(context,BooksBooking.class);
+                intent.putExtra("course",(String)course.getSelectedItem());
+                intent.putExtra("dept",(String)dept.getSelectedItem());
+                intent.putExtra("semester",(String)sem.getSelectedItem());
+                startActivity(intent);
+            }
+        });
     }
     void getCourses(){
 
@@ -57,7 +68,7 @@ public class Booking extends AppCompatActivity {
                     @Override
                     public void onResponse(String response) {
                         try {
-                            Log.d("Response",response);
+
                             JSONObject first = new JSONObject(response);
                             int fetch = first.getInt("fetch");
                             if(fetch == 1) {
@@ -81,7 +92,6 @@ public class Booking extends AppCompatActivity {
                                         map.put(c, subvalues);
                                     }
                                 }
-                                Log.d("After Iteration", semesters.toString());
                                 courses = new String[map.size()];
                                 for (Map.Entry<String, HashMap<String, ArrayList<String>>> entry : map.entrySet()) {
                                     courses[inc++] = entry.getKey();
