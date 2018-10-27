@@ -21,13 +21,15 @@
         </activity>
         <activity
             android:name=".controlActivity"
-            android:label="@string/title_activity_control"></activity>
+            android:label="@string/title_activity_control" />
         <activity android:name=".Booking" />
-        <activity android:name=".BooksBooking"></activity>
+        <activity android:name=".BooksBooking" />
 
         <meta-data
             android:name="preloaded_fonts"
             android:resource="@array/preloaded_fonts" />
+
+        <activity android:name=".BookingHistory"></activity>
     </application>
 
 </manifest>

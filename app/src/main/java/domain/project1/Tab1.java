@@ -72,7 +72,7 @@ public class Tab1 extends Fragment {
     }
 
     void getBooks(){
-        String url = new getUrl().setUrl("getHomeContents");
+        String url = new getUrl().setUrl(context,"getHomeContents");
         final String course = preferences.getString("course","null");
         final String dept = preferences.getString("department","null");
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -101,7 +101,7 @@ public class Tab1 extends Fragment {
                                         JSONObject obj = ob.getJSONObject(key2);
                                         String book_name = obj.getString("book_name");
                                         BookDetails d = new BookDetails(key2, book_name, course,
-                                                dept, obj.getString("author"), obj.getString("semester"),
+                                                dept, obj.getString("author"), obj.getString("semester"),obj.getString("subject"),
                                                 obj.getBoolean("renewable"), obj.getInt("volume"),
                                                 obj.getInt("available"), obj.getInt("published"));
                                         bookDetails.add(d);

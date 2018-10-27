@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">#1e2535</item>
         <item name="colorPrimaryDark">#1e2535</item>
-        <item name="colorAccent">#ffffff</item>
+        <item name="colorAccent">#4eb175</item>
     </style>
     <style name="AppTheme.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
 

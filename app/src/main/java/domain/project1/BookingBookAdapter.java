@@ -1,17 +1,13 @@
 package domain.project1;
 
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.LayoutAnimationController;
 import android.widget.Filter;
 import android.widget.Filterable;
 import android.widget.ImageView;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -75,6 +71,12 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         }
         else
             holder.renewable.setText(Html.fromHtml("<font color=#ff0000>Non Renewable</font>"));
+
+        if(book.getSubject_name().equals("not defined")){
+            holder.subject.setVisibility(View.GONE);
+        }
+        else
+            holder.subject.setText("Subject : " + book.getSubject_name());
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -148,7 +150,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
                     {
                         BookDetails p=new BookDetails(filterBooks.get(i).getBook_id(),filterBooks.get(i).getBook_name(),
                                 filterBooks.get(i).getCourse(),filterBooks.get(i).getDepartment(),filterBooks.get(i).getAuthor(),
-                                filterBooks.get(i).getSemester(),filterBooks.get(i).isRenewable(),
+                                filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).isRenewable(),
                                 filterBooks.get(i).getVolume(),filterBooks.get(i).getAvailable(),filterBooks.get(i).getPublished_year());
                         filters.add(p);
                     }
@@ -162,7 +164,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
                 for(int i=0;i<filterBooks.size();i++){
                     BookDetails p=new BookDetails(filterBooks.get(i).getBook_id(),filterBooks.get(i).getBook_name(),
                             filterBooks.get(i).getCourse(),filterBooks.get(i).getDepartment(),filterBooks.get(i).getAuthor(),
-                            filterBooks.get(i).getSemester(),filterBooks.get(i).isRenewable(),
+                            filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).isRenewable(),
                             filterBooks.get(i).getVolume(),filterBooks.get(i).getAvailable(),filterBooks.get(i).getPublished_year());
                     dFilters.add(p);
                 }
@@ -188,7 +190,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
 
     public class HomeHolder extends RecyclerView.ViewHolder{
         TextView book_name;
-        TextView author_name;
+        TextView author_name,subject;
         TextView published;
         TextView available;
         TextView renewable;
@@ -201,8 +203,9 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
             book_name = convertView.findViewById(R.id.bookname);
             author_name = convertView.findViewById(R.id.author);
             published = convertView.findViewById(R.id.published);
-            available = convertView.findViewById(R.id.available);
+            available = convertView.findViewById(R.id.booked);
             renewable = convertView.findViewById(R.id.renewable);
+            subject = convertView.findViewById(R.id.subject);
             add = convertView.findViewById(R.id.add);
             sub = convertView.findViewById(R.id.sub);
             item_count = convertView.findViewById(R.id.item_count);

@@ -79,7 +79,7 @@ public class BooksBooking extends AppCompatActivity {
     }
 
     void getBooks(){
-        String url = new getUrl().setUrl("getHomeContents");
+        String url = new getUrl().setUrl(context,"getHomeContents");
         RequestQueue queue = Volley.newRequestQueue(context);
         final ArrayList<BookDetails> bookDetails = new ArrayList<>();
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
@@ -102,7 +102,7 @@ public class BooksBooking extends AppCompatActivity {
                                     JSONObject obj = oj.getJSONObject(key);
                                     String book_name = obj.getString("book_name");
                                     BookDetails d = new BookDetails(key, book_name, course,
-                                            department, obj.getString("author"), semester,
+                                            department, obj.getString("author"), semester,obj.getString("subject"),
                                             obj.getBoolean("renewable"), obj.getInt("volume"),
                                             obj.getInt("available"), obj.getInt("published"));
                                     bookDetails.add(d);
@@ -167,7 +167,7 @@ public class BooksBooking extends AppCompatActivity {
 
     void checkMyTransactionCount(){
 
-        String url = new getUrl().setUrl("MyTransactionCount");
+        String url = new getUrl().setUrl(context,"MyTransactionCount");
         RequestQueue queue = Volley.newRequestQueue(context);
 
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,

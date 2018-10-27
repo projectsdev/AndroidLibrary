@@ -3,6 +3,7 @@ package domain.project1;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.TextUtils;
@@ -10,7 +11,9 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.android.volley.AuthFailureError;
@@ -32,6 +35,7 @@ public class Login extends AppCompatActivity {
     Button login;
     ProgressBar bar;
     Context context;
+    ImageView urlSetter;
     String uname = null,pass = null;
     SharedPreferences preferences;
     SharedPreferences.Editor editor;
@@ -44,6 +48,13 @@ public class Login extends AppCompatActivity {
         password = findViewById(R.id.password);
         login = findViewById(R.id.loginbutton);
         bar = findViewById(R.id.bar);
+        urlSetter = findViewById(R.id.img);
+        urlSetter.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                urlSetterView();
+            }
+        });
         context = this;
         preferences = getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
         autologin = preferences.getBoolean("autologin",false);
@@ -81,7 +92,7 @@ public class Login extends AppCompatActivity {
 
     private void signin() {
 
-        String url = new getUrl().setUrl("login");
+        String url = new getUrl().setUrl(context,"login");
         RequestQueue queue = Volley.newRequestQueue(this);
 
         StringRequest stringRequest = new StringRequest(Request.Method.POST, url, new Response.Listener<String>() {
@@ -142,5 +153,34 @@ public class Login extends AppCompatActivity {
         Intent intent = new Intent(Login.this, controlActivity.class);
         startActivity(intent);
         finish();
+    }
+    void urlSetterView(){
+        View view = View.inflate(this,R.layout.url_view,null);
+        TextView txt = view.findViewById(R.id.head);
+        final EditText url_input = view.findViewById(R.id.url_input);
+        Button set = view.findViewById(R.id.button2);
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setView(view);
+        final AlertDialog dialog = builder.create();
+        String url = preferences.getString("currentLocalhost","null");
+        if(!url.equals("null")){
+            url_input.setText(url);
+        }
+        set.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                String ip = url_input.getText().toString();
+                if(ip.equals("")){
+                    Toast.makeText(context,"Input an IP Address(open cmd and type : ifconfig/ipconfig",Toast.LENGTH_SHORT).show();
+                }
+                else{
+                    editor.putString("currentLocalhost",ip);
+                    editor.commit();
+                    dialog.cancel();
+                }
+            }
+        });
+        dialog.show();
+
     }
 }

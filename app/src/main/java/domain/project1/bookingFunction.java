@@ -58,6 +58,7 @@ public class bookingFunction {
                         ob.put("published",listArrayBook.get(i).getPublished_year());
                         ob.put("semester",listArrayBook.get(i).getSemester());
                         ob.put("volume",listArrayBook.get(i).getVolume());
+                        ob.put("subject",listArrayBook.get(i).getSubject_name());
                         ob.put("course",course);
                         ob.put("dept",dept);
                         ob.put("semester",sem);
@@ -77,7 +78,7 @@ public class bookingFunction {
     void updateFunction(){
         proBar.setVisibility(View.VISIBLE);
         checkout.setVisibility(View.GONE);
-        String url = new getUrl().setUrl("bookMyBooks");
+        String url = new getUrl().setUrl(context,"bookMyBooks");
         final String admission_no = preferences.getString("admission_no","null");
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,

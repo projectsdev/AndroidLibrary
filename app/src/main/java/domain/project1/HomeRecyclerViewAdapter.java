@@ -5,7 +5,6 @@ import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.BaseAdapter;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -76,6 +75,11 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
         holder.published.setText("Published Year : "+book.getPublished_year());
         holder.available.setText(Html.fromHtml("Available : <font color=#4eb175>"+book.getAvailable()+"</font>"));
         holder.book_image.setImageResource(R.drawable.book);
+        if(book.getSubject_name().equals("not defined")){
+            holder.subject_name.setVisibility(View.GONE);
+        }
+        else
+            holder.subject_name.setText("Subject : " + book.getSubject_name());
     }
 
     @Override
@@ -87,13 +91,12 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
         return books.size();
     }
 
-
-
     public class HomeHolder extends RecyclerView.ViewHolder{
         TextView book_name;
         TextView author_name;
         TextView published;
         TextView available;
+        TextView subject_name;
         ImageView book_image;
         public HomeHolder(View convertView) {
             super(convertView);
@@ -101,7 +104,8 @@ public class HomeRecyclerViewAdapter extends /*BaseAdapter{
             book_name = convertView.findViewById(R.id.bookname);
             author_name = convertView.findViewById(R.id.author);
             published = convertView.findViewById(R.id.published);
-            available = convertView.findViewById(R.id.available);
+            available = convertView.findViewById(R.id.booked);
+            subject_name = convertView.findViewById(R.id.subject);
         }
     }
 }

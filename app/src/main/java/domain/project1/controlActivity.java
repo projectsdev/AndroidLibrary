@@ -68,8 +68,10 @@ public class controlActivity extends AppCompatActivity {
                     Intent Booking = new Intent(context,Booking.class);
                     startActivity(Booking);
 
-                } else if (itemId == R.id.author) {
-                    Toast.makeText(getApplicationContext(), "Author selected", Toast.LENGTH_SHORT).show();
+                } else if (itemId == R.id.booking) {
+
+                    Intent obj = new Intent(controlActivity.this,BookingHistory.class);
+                    startActivity(obj);
 
                 }
                 else  if (itemId == R.id.logout) {

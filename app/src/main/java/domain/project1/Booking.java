@@ -61,7 +61,7 @@ public class Booking extends AppCompatActivity {
     }
     void getCourses(){
 
-        String url = new getUrl().setUrl("getCourses");
+        String url = new getUrl().setUrl(context,"getCourses");
         RequestQueue queue = Volley.newRequestQueue(context);
         StringRequest postRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {

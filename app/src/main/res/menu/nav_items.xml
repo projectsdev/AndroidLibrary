@@ -4,15 +4,9 @@
         <item android:id="@+id/books"
             android:title="Books"
             android:icon="@drawable/ic_library_books_black_24dp"/>
-        <item android:title="Author"
-            android:id="@+id/author"
-            android:icon="@drawable/ic_person_black_24dp"/>
-        <item android:title="Booking"
+        <item android:title="My Bookings"
             android:id="@+id/booking"
             android:icon="@drawable/ic_library_add_black_24dp"/>
-        <item android:id="@+id/Notification"
-            android:title="Notifications"
-            android:icon="@drawable/ic_priority_high_black_24dp"/>
         <item android:id="@+id/logout"
             android:title="Logout"
             android:icon="@drawable/ic_keyboard_backspace_black_24dp"/>
