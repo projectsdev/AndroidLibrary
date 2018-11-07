@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.support.v7.widget.RecyclerView;
 import android.text.Html;
 import android.util.Log;
 import android.view.View;
@@ -29,15 +30,21 @@ public class renewOrReturn {
 
     Context context;
     SharedPreferences preferences;
-
-    public renewOrReturn(Context context) {
+    ArrayList<HistoryDetails> historyDetails;
+    int position;
+    HistoryContentAdapter historyAdap;
+    public renewOrReturn(Context context, ArrayList<HistoryDetails> historyDetails, int position, HistoryContentAdapter historyAdap) {
         this.context = context;
+        this.position = position;
+        this.historyDetails = historyDetails;
+        this.historyAdap = historyAdap;
         this.preferences = context.getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
+
     }
 
     void renewOrReturn(final int renew_return, final String txn_id, final String serial_no, final String book_id,
                        final String dept, final String course, final String sem, final ProgressBar bar, final Button renew, final Button return_,
-                       final TextView issue_date, final TextView final_date){
+                       final TextView issue_date, final TextView final_date, final TextView no_nooks){
         bar.setVisibility(View.VISIBLE);
         renew.setVisibility(View.GONE);
         return_.setVisibility(View.GONE);
@@ -52,18 +59,27 @@ public class renewOrReturn {
                             JSONObject object = new JSONObject(response);
                             int update = object.getInt("update");
                             if(update == 1){
+                                issue_date.setText(Html.fromHtml("Issued on : " +object.getString("startDate")));
+                                final_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +object.getString("finalDate")+"</font>"));
                                 bar.setVisibility(View.GONE);
                                 renew.setVisibility(View.VISIBLE);
                                 return_.setVisibility(View.VISIBLE);
-                                issue_date.setText(Html.fromHtml("Issued on : " +object.getString("startDate")));
-                                final_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +object.getString("finalDate")+"</font>"));
                             }
                             else if(update == 2){
-                                Intent intent = new Intent(context,BookingHistory.class);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
-                                context.startActivity(intent);
-                                ((Activity)context).finish();
+//                                Intent intent = new Intent(context,BookingHistory.class);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+//                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
+//                                context.startActivity(intent);
+//                                ((Activity)context).finish();
+                                historyDetails.remove(position);
+                                historyAdap.notifyDataSetChanged();
+                                bar.setVisibility(View.GONE);
+                                renew.setVisibility(View.VISIBLE);
+                                return_.setVisibility(View.VISIBLE);
+                                if(historyDetails.isEmpty()){
+                                    no_nooks.setVisibility(View.VISIBLE);
+                                }
+
                             }
                             else if(update == 0){
                                 bar.setVisibility(View.GONE);
@@ -100,6 +116,11 @@ public class renewOrReturn {
                     body.put("course",course);
                     body.put("semester",sem);
                     body.put("book_id",book_id);
+                    boolean check = historyDetails.get(position).isRenewable();
+                    if(check)
+                    body.put("RN_NRN",1);
+                    else
+                    body.put("RN_NRN",2);
 
                 } catch (Exception e) {
                     e.printStackTrace();

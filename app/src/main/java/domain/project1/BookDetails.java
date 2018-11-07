@@ -1,12 +1,12 @@
 package domain.project1;
 
 public class BookDetails {
-    String book_name,course,department,author,semester,book_id,subject_name;
+    String book_name,course,department,author,semester,book_id,subject_name,faculty;
     boolean renewable;
     int volume,available,published_year;
 
     public BookDetails(String book_id,String book_name, String course, String department,
-                       String author, String semester, String subject_name,boolean renewable,
+                       String author, String semester, String subject_name,String faculty,boolean renewable,
                        int volume, int available, int published_year) {
         this.book_id = book_id;
         this.book_name = book_name;
@@ -17,8 +17,12 @@ public class BookDetails {
         this.renewable = renewable;
         this.volume = volume;
         this.available = available;
+        this.faculty = faculty;
         this.published_year = published_year;
         this.subject_name = subject_name;
+    }
+    public String getFaculty(){
+        return faculty;
     }
     public String getBook_id() {
         return book_id;

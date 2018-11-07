@@ -2,11 +2,11 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
         <item android:id="@+id/books"
-            android:title="Books"
-            android:icon="@drawable/ic_library_books_black_24dp"/>
-        <item android:title="My Bookings"
-            android:id="@+id/booking"
-            android:icon="@drawable/ic_library_add_black_24dp"/>
+            android:title="Renewable Books"
+            android:icon="@drawable/ic_book_black_24dp"/>
+        <item android:title="Non-Renewable Books"
+            android:id="@+id/nrbooks"
+            android:icon="@drawable/ic_book_yellow_24dp"/>
         <item android:id="@+id/logout"
             android:title="Logout"
             android:icon="@drawable/ic_keyboard_backspace_black_24dp"/>

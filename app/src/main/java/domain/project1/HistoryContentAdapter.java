@@ -22,10 +22,25 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
 
     Context context;
     ArrayList<HistoryDetails> history;
-    public HistoryContentAdapter(Context context,ArrayList<HistoryDetails> hist) {
+    int due = 0;
+    TextView dues,no_books;
+    RecyclerView rAdap;
+    public HistoryContentAdapter(Context context,ArrayList<HistoryDetails> hist,TextView dues,TextView no_books,RecyclerView rAdap ) {
         this.context = context;
         this.history = hist;
+        this.dues = dues;
+        this.rAdap = rAdap;
+        this.no_books = no_books;
+        for(int i=0;i<hist.size();i++)
+        if(expired(hist.get(i).getLast_date()))
+            due+=1;
+        if(due!=0){
+            dues.setVisibility(View.VISIBLE);
+            dues.setText(context.getResources().getString(R.string.ruppee)+due);
+        }
+
     }
+
 
     @Override
     public HistoryHolder onCreateViewHolder(ViewGroup parent, int viewType) {
@@ -35,7 +50,7 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
     }
 
     @Override
-    public void onBindViewHolder(final HistoryHolder holder, int position) {
+    public void onBindViewHolder(final HistoryHolder holder, final int position) {
         final HistoryDetails h = history.get(position);
         holder.book_image.setImageResource(R.drawable.book);
         holder.book_name.setText(h.getBook_name());
@@ -56,6 +71,12 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
             holder.last_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +h.getLast_date()+"</font>"));
             holder.renew.setBackgroundColor(Color.parseColor("#4eb175"));
         }
+        if(h.isRenewable()){
+            holder.renew.setVisibility(View.VISIBLE);
+        }
+        else {
+            holder.renew.setVisibility(View.INVISIBLE);
+        }
         holder.renew.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -63,16 +84,16 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
                     Toast.makeText(context,"You can't renew this book",Toast.LENGTH_SHORT).show();
                 }
                 else{
-                   new renewOrReturn(context).renewOrReturn(1,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
-                           h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date);
+                   new renewOrReturn(context,history,position, (HistoryContentAdapter) rAdap.getAdapter()).renewOrReturn(1,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
+                           h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books);
                 }
             }
         });
         holder.return_.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new renewOrReturn(context).renewOrReturn(2,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
-                        h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date);
+                new renewOrReturn(context,history,position,(HistoryContentAdapter) rAdap.getAdapter()).renewOrReturn(2,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
+                        h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books);
                 }
         });
 

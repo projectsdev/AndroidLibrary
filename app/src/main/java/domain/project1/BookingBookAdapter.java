@@ -28,8 +28,9 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
     HashMap<String,Integer> cartMap = new HashMap<>();
     int itemCount,addCount = 0;
     String course,dept,semester;
+    int RN_NRN;
 
-    public BookingBookAdapter(Context context, TextView no_books, RecyclerView recyclerView ,
+    public BookingBookAdapter(int RN_NRN,Context context, TextView no_books, RecyclerView recyclerView ,
                               RelativeLayout linearLayout, TextView order_text,ProgressBar proBar,
                               ArrayList<BookDetails> books, String course, String dept, String semester,int count) {
         this.context = context;
@@ -41,6 +42,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         this.order_text = order_text;
         this.course = course;
         this.dept = dept;
+        this.RN_NRN = RN_NRN;
         this.semester = semester;
         this.proBar = proBar;
         this.itemCount = count;
@@ -66,6 +68,12 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         holder.available.setText(Html.fromHtml("Available : <font color=#4eb175>"+book.getAvailable()+"</font>"));
         holder.book_image.setImageResource(R.drawable.book);
         holder.item_count.setText(String.valueOf(cartMap.get(book.getBook_id())));
+        if(book.getFaculty().equals("nil")){
+            holder.faculty.setVisibility(View.GONE);
+        }
+        else{
+            holder.faculty.setText(Html.fromHtml("Faculty : "+book.getFaculty()));
+        }
         if(book.isRenewable()){
             holder.renewable.setText(Html.fromHtml("<font color=#4eb175>Renewable</font>"));
         }
@@ -77,6 +85,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         }
         else
             holder.subject.setText("Subject : " + book.getSubject_name());
+
         holder.add.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -119,7 +128,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                new bookingFunction(context).parseDataAndSend(cartMap,books,course,dept,semester,proBar,order_text);
+                new bookingFunction(context).parseDataAndSend(RN_NRN,cartMap,books,course,dept,semester,proBar,order_text);
             }
         });
 
@@ -150,7 +159,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
                     {
                         BookDetails p=new BookDetails(filterBooks.get(i).getBook_id(),filterBooks.get(i).getBook_name(),
                                 filterBooks.get(i).getCourse(),filterBooks.get(i).getDepartment(),filterBooks.get(i).getAuthor(),
-                                filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).isRenewable(),
+                                filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).getFaculty(),filterBooks.get(i).isRenewable(),
                                 filterBooks.get(i).getVolume(),filterBooks.get(i).getAvailable(),filterBooks.get(i).getPublished_year());
                         filters.add(p);
                     }
@@ -164,8 +173,9 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
                 for(int i=0;i<filterBooks.size();i++){
                     BookDetails p=new BookDetails(filterBooks.get(i).getBook_id(),filterBooks.get(i).getBook_name(),
                             filterBooks.get(i).getCourse(),filterBooks.get(i).getDepartment(),filterBooks.get(i).getAuthor(),
-                            filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).isRenewable(),
+                            filterBooks.get(i).getSemester(),filterBooks.get(i).getSubject_name(),filterBooks.get(i).getFaculty(),filterBooks.get(i).isRenewable(),
                             filterBooks.get(i).getVolume(),filterBooks.get(i).getAvailable(),filterBooks.get(i).getPublished_year());
+
                     dFilters.add(p);
                 }
                 results.count=dFilters.size();
@@ -194,7 +204,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         TextView published;
         TextView available;
         TextView renewable;
-        TextView add,sub,item_count;
+        TextView add,sub,item_count,faculty;
         ImageView book_image;
 
         public HomeHolder(View convertView) {
@@ -209,6 +219,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
             add = convertView.findViewById(R.id.add);
             sub = convertView.findViewById(R.id.sub);
             item_count = convertView.findViewById(R.id.item_count);
+            faculty = convertView.findViewById(R.id.faculty);
         }
     }
 }

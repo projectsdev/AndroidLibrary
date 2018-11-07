@@ -29,7 +29,7 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 public class BookingHistory extends AppCompatActivity {
-    TextView head;
+
     RecyclerView recyclerView;
     TextView no_books;
     ProgressBar bar;
@@ -43,7 +43,6 @@ public class BookingHistory extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_booking_history);
         context = this;
-        head = findViewById(R.id.head);
         recyclerView = findViewById(R.id.recyclerview);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
@@ -95,7 +94,7 @@ public class BookingHistory extends AppCompatActivity {
                                             no_books.setVisibility(View.VISIBLE);
                                         }
                                         else {
-                                            adapter = new HistoryContentAdapter(context, historyArray);
+//                                            adapter = new HistoryContentAdapter(context, historyArray);
                                             recyclerView.setAdapter(adapter);
                                             recyclerView.setLayoutAnimation(controller);
                                             recyclerView.getAdapter().notifyDataSetChanged();

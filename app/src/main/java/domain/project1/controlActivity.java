@@ -68,11 +68,10 @@ public class controlActivity extends AppCompatActivity {
                     Intent Booking = new Intent(context,Booking.class);
                     startActivity(Booking);
 
-                } else if (itemId == R.id.booking) {
-
-                    Intent obj = new Intent(controlActivity.this,BookingHistory.class);
-                    startActivity(obj);
-
+                }
+                else if(itemId == R.id.nrbooks){
+                    Intent Booking = new Intent(context,GetNonRenewablebooks.class);
+                    startActivity(Booking);
                 }
                 else  if (itemId == R.id.logout) {
                     Intent obj = new Intent(controlActivity.this,Login.class);
@@ -92,30 +91,17 @@ public class controlActivity extends AppCompatActivity {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setHomeAsUpIndicator(R.drawable.ic_dehaze_black_24dp);
         mSectionsPagerAdapter = new SectionsPagerAdapter(getSupportFragmentManager());
-        mViewPager = (ViewPager) findViewById(R.id.container);
+        mViewPager = findViewById(R.id.container);
         mViewPager.setAdapter(mSectionsPagerAdapter);
-        tabLayout = (TabLayout) findViewById(R.id.tabs);
+        tabLayout = findViewById(R.id.tabs);
         tabLayout.setupWithViewPager(mViewPager);
-
-        /*mViewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
-        tabLayout.addOnTabSelectedListener(new TabLayout.ViewPagerOnTabSelectedListener(mViewPager));*/
-
 
     }
 
-//LOGOUT OPTIONS IMPLEMENTED HERE
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        // Inflate the menu; this adds items to the action bar if it is present.
-//        getMenuInflater().inflate(R.menu.menu_control, menu);
-//        return true;
-//    }
+
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        // Handle action bar item clicks here. The action bar will
-        // automatically handle clicks on the Home/Up button, so long
-        // as you specify a parent activity in AndroidManifest.xml.
 
         int id = item.getItemId();
 
@@ -129,7 +115,7 @@ public class controlActivity extends AppCompatActivity {
     }
 
     public class SectionsPagerAdapter extends FragmentPagerAdapter {
-        String[] titles = new String[]{"Home","Library","Recently Added"};
+        String[] titles = new String[]{"Home","Recently Added","My Bookings"};
         public SectionsPagerAdapter(FragmentManager fm) {
             super(fm);
         }

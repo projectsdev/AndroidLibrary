@@ -31,12 +31,13 @@ public class bookingFunction {
     String course,dept,semester;
     ProgressBar proBar;
     TextView checkout;
+    int RN_NRN;
     JSONObject json = new JSONObject();
     public bookingFunction(Context context) {
         this.context = context;
         preferences = context.getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
     }
-     void parseDataAndSend(HashMap<String,Integer> object, ArrayList<BookDetails> listArrayBook,
+     void parseDataAndSend(int RN_NRN,HashMap<String,Integer> object, ArrayList<BookDetails> listArrayBook,
                            String course, String dept, String sem, ProgressBar progressBar, TextView checkout){
         this.object = object;
         this.listArrayBook = listArrayBook;
@@ -45,6 +46,7 @@ public class bookingFunction {
         this.semester = sem;
         this.proBar = progressBar;
         this.checkout = checkout;
+        this.RN_NRN = RN_NRN;
         for(Map.Entry<String,Integer> entry:object.entrySet()){
             String entryKey = entry.getKey();
             Integer entryValue = entry.getValue();
@@ -59,6 +61,7 @@ public class bookingFunction {
                         ob.put("semester",listArrayBook.get(i).getSemester());
                         ob.put("volume",listArrayBook.get(i).getVolume());
                         ob.put("subject",listArrayBook.get(i).getSubject_name());
+                        ob.put("faculty",listArrayBook.get(i).getFaculty());
                         ob.put("course",course);
                         ob.put("dept",dept);
                         ob.put("semester",sem);
@@ -86,16 +89,21 @@ public class bookingFunction {
                     @Override
                     public void onResponse(String response) {
                         try {
-
+                            Intent intent;
                             JSONObject object = new JSONObject(response);
                             int update = object.getInt("update");
                             if(update == 1){
-                                Toast.makeText(context,"Booking Successful",Toast.LENGTH_SHORT).show();
+                                Toast.makeText(context,"Booking Successfull",Toast.LENGTH_SHORT).show();
                                 proBar.setVisibility(View.GONE);
-                                Intent intent = new Intent(context,BooksBooking.class);
-                                intent.putExtra("course",course);
-                                intent.putExtra("dept",dept);
-                                intent.putExtra("semester",semester);
+                                if(RN_NRN == 1) {
+                                    intent = new Intent(context, BooksBooking.class);
+                                    intent.putExtra("course", course);
+                                    intent.putExtra("dept", dept);
+                                    intent.putExtra("semester", semester);
+                                }
+                                else{
+                                    intent = new Intent(context, GetNonRenewablebooks.class);
+                                }
                                 intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TASK)
                                         .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
                                 context.startActivity(intent);
@@ -129,6 +137,7 @@ public class bookingFunction {
                     body.put("course",course);
                     body.put("dept",dept);
                     body.put("semester",semester);
+                    body.put("RN_NRN",RN_NRN);
                     body.put("my_books",json);
 
                 } catch (Exception e) {

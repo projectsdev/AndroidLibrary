@@ -11,7 +11,6 @@ import android.util.Log;
 import android.view.View;
 import android.view.animation.AnimationUtils;
 import android.view.animation.LayoutAnimationController;
-import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout;
 import android.widget.SearchView;
@@ -30,7 +29,8 @@ import org.json.JSONObject;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-public class BooksBooking extends AppCompatActivity {
+public class GetNonRenewablebooks extends AppCompatActivity {
+
     TextView title,no_books;
     ProgressBar bar;
     SearchView searchView;
@@ -68,10 +68,10 @@ public class BooksBooking extends AppCompatActivity {
         progress = findViewById(R.id.proBar);
         recyclerView.setHasFixedSize(true);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        course = getIntent().getExtras().getString("course");
-        department = getIntent().getExtras().getString("dept");
-        semester = getIntent().getExtras().getString("semester");
-        title.setText(course+'/'+department+'/'+semester);
+        course = "null";
+        department = "null";
+        semester = "null";
+        title.setText("Search your book");
         controller = AnimationUtils.loadLayoutAnimation(context,R.anim.layout_falldown);
         preferences = getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
         admission_number = preferences.getString("admission_no","null");
@@ -79,10 +79,10 @@ public class BooksBooking extends AppCompatActivity {
     }
 
     void getBooks(){
-        String url = new getUrl().setUrl(context,"getHomeContents");
+        String url = new getUrl().setUrl(context,"getNonRenewables");
         RequestQueue queue = Volley.newRequestQueue(context);
         final ArrayList<BookDetails> bookDetails = new ArrayList<>();
-        StringRequest postRequest = new StringRequest(Request.Method.POST, url,
+        StringRequest postRequest = new StringRequest(Request.Method.GET, url,
                 new Response.Listener<String>() {
                     @Override
                     public void onResponse(String response) {
@@ -102,20 +102,21 @@ public class BooksBooking extends AppCompatActivity {
                                     JSONObject obj = oj.getJSONObject(key);
                                     String book_name = obj.getString("book_name");
                                     BookDetails d = new BookDetails(key, book_name, course,
-                                            department, obj.getString("author"), semester,obj.getString("subject"),
+                                            department, obj.getString("author"), semester,"not defined",
                                             obj.getString("faculty"),
                                             obj.getBoolean("renewable"), obj.getInt("volume"),
                                             obj.getInt("available"), obj.getInt("published"));
                                     bookDetails.add(d);
 
 
-                                    adapter = new BookingBookAdapter(1,context, no_books,recyclerView,linearLayout,order_text ,progress,bookDetails
-                                    ,course,department,semester,count);
+                                    adapter = new BookingBookAdapter(2,context,
+                                            no_books,recyclerView,linearLayout,order_text ,progress,bookDetails
+                                            ,course,department,semester,count);
                                     recyclerView.setAdapter(adapter);
                                     recyclerView.setLayoutAnimation(controller);
                                     recyclerView.getAdapter().notifyDataSetChanged();
                                     recyclerView.scheduleLayoutAnimation();
-                                    searchView.setQueryHint("Search your subject/author...");
+                                    searchView.setQueryHint("Enter Book name/author...");
                                     searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                                         @Override
                                         public boolean onQueryTextSubmit(String query) {
@@ -148,10 +149,10 @@ public class BooksBooking extends AppCompatActivity {
             public byte[] getBody() throws AuthFailureError {
                 JSONObject body = new JSONObject();
                 try {
-                    body.put("course",course);
+                   /* body.put("course",course);
                     body.put("dept",department);
                     body.put("semester",semester);
-                    body.put("flag",1); // 1 for booking contents
+                    body.put("flag",1); // 1 for booking contents*/
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -202,7 +203,7 @@ public class BooksBooking extends AppCompatActivity {
             public byte[] getBody() throws AuthFailureError {
                 JSONObject body = new JSONObject();
                 try {
-                            body.put("admission_no",admission_number);
+                    body.put("admission_no",admission_number);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
