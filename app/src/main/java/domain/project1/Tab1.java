@@ -77,6 +77,7 @@ public class Tab1 extends Fragment {
         final String dept = preferences.getString("department","null");
         RequestQueue queue = Volley.newRequestQueue(context);
         final ArrayList<BookDetails> bookDetails = new ArrayList<>();
+        no_data.setVisibility(View.INVISIBLE);
         StringRequest postRequest = new StringRequest(Request.Method.POST, url,
                 new Response.Listener<String>() {
                     @Override

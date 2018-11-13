@@ -1,12 +1,12 @@
 package domain.project1;
 
 public class HistoryDetails {
-    String Transaction_id,Subject,author,issue_date,last_date,Book_name,serial_No,book_id,dept,course,semester;
+    String Transaction_id,Subject,author,issue_date,last_date,Book_name,serial_No,book_id,dept,course,semester,faculty;
     int published_year,booked_no;
     boolean renewable,return_status;
 
     public HistoryDetails(String transaction_id,String serial_No,String book_id,String book_name, String subject, String author, String issue_date,
-                          String last_date, int published_year, int booked_no, boolean renewable,boolean return_status,String dept,String course,String semester) {
+                          String last_date,String faculty, int published_year, int booked_no, boolean renewable,boolean return_status,String dept,String course,String semester) {
         Transaction_id = transaction_id;
         Subject = subject;
         this.Book_name = book_name;
@@ -22,7 +22,13 @@ public class HistoryDetails {
         this.dept = dept;
         this.course = course;
         this.semester = semester;
+        this.faculty = faculty;
     }
+
+    public String getFaculty() {
+        return faculty;
+    }
+
     public boolean getReturnStatus(){
         return return_status;
     }

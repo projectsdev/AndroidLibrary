@@ -23,7 +23,10 @@ import com.android.volley.toolbox.Volley;
 
 import org.json.JSONObject;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 
 public class renewOrReturn {
@@ -44,10 +47,12 @@ public class renewOrReturn {
 
     void renewOrReturn(final int renew_return, final String txn_id, final String serial_no, final String book_id,
                        final String dept, final String course, final String sem, final ProgressBar bar, final Button renew, final Button return_,
-                       final TextView issue_date, final TextView final_date, final TextView no_nooks){
+                       final TextView issue_date, final TextView final_date, final TextView no_nooks,
+                       final TextView due_text,TextView view_due){
         bar.setVisibility(View.VISIBLE);
         renew.setVisibility(View.GONE);
         return_.setVisibility(View.GONE);
+        view_due.setVisibility(View.INVISIBLE);
         String url = new getUrl().setUrl(context,"renewOrreturn");
         final String admission_no = preferences.getString("admission_no","null");
         RequestQueue queue = Volley.newRequestQueue(context);
@@ -66,7 +71,6 @@ public class renewOrReturn {
                                 return_.setVisibility(View.VISIBLE);
                             }
                             else if(update == 2){
-//                                Intent intent = new Intent(context,BookingHistory.class);
 //                                intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 //                                intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
 //                                context.startActivity(intent);
@@ -78,6 +82,19 @@ public class renewOrReturn {
                                 return_.setVisibility(View.VISIBLE);
                                 if(historyDetails.isEmpty()){
                                     no_nooks.setVisibility(View.VISIBLE);
+                                }
+                                else{
+                                    int dues = 0;
+                                    for(int i = 0; i<historyDetails.size(); i++){
+                                        if(expired(historyDetails.get(i).getLast_date()))
+                                            dues++;
+                                    }
+                                    if(dues!=0){
+                                        due_text.setVisibility(View.VISIBLE);
+                                        due_text.setText(context.getResources().getString(R.string.ruppee)+" "+dues);
+                                    }
+                                    else
+                                        due_text.setVisibility(View.INVISIBLE);
                                 }
 
                             }
@@ -134,5 +151,21 @@ public class renewOrReturn {
             }
         };
         queue.add(postRequest);
+    }
+    boolean expired(String lastDate){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        try {
+            Date last_date = dateFormat.parse(lastDate);
+            Date today = dateFormat.parse(dateFormat.format(new Date()));
+            if(today.after(last_date)){
+                return true;
+            }
+            else
+                return false;
+
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return true;
     }
     }

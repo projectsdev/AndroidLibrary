@@ -18,7 +18,7 @@ import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Date;
 
-public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContentAdapter.HistoryHolder> {
+public class HistoryContentAdapter extends RecyclerView.Adapter<HistoryContentAdapter.HistoryHolder> {
 
     Context context;
     ArrayList<HistoryDetails> history;
@@ -36,7 +36,7 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
             due+=1;
         if(due!=0){
             dues.setVisibility(View.VISIBLE);
-            dues.setText(context.getResources().getString(R.string.ruppee)+due);
+            dues.setText(context.getResources().getString(R.string.ruppee)+" "+due);
         }
 
     }
@@ -64,18 +64,29 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
         else
             holder.subject_name.setText("Subject : " + h.getSubject());
         if(expired(h.getLast_date())){
-            holder.last_date.setText(Html.fromHtml("Last Date : <font color=#ff0000>" +h.getLast_date()+"</font>"));
+            holder.last_date.setText(Html.fromHtml("Last Date : <font color=#ff0000>" +formatDate(h.getLast_date())+"</font>"));
             holder.renew.setBackgroundColor(Color.parseColor("#adff0000"));
+            holder.due.setVisibility(View.VISIBLE);
         }
         else{
-            holder.last_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +h.getLast_date()+"</font>"));
+            holder.last_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +formatDate(h.getLast_date())+"</font>"));
             holder.renew.setBackgroundColor(Color.parseColor("#4eb175"));
+            holder.due.setVisibility(View.INVISIBLE);
         }
         if(h.isRenewable()){
             holder.renew.setVisibility(View.VISIBLE);
+            holder.non_renew.setVisibility(View.GONE);
         }
         else {
-            holder.renew.setVisibility(View.INVISIBLE);
+            holder.renew.setVisibility(View.GONE);
+            holder.non_renew.setVisibility(View.VISIBLE);
+
+        }
+        if(h.getFaculty().equals("nil")){
+            holder.faculty.setVisibility(View.GONE);
+        }
+        else{
+            holder.faculty.setVisibility(View.VISIBLE);
         }
         holder.renew.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -85,7 +96,7 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
                 }
                 else{
                    new renewOrReturn(context,history,position, (HistoryContentAdapter) rAdap.getAdapter()).renewOrReturn(1,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
-                           h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books);
+                           h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books,dues,holder.due);
                 }
             }
         });
@@ -93,7 +104,7 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
             @Override
             public void onClick(View view) {
                 new renewOrReturn(context,history,position,(HistoryContentAdapter) rAdap.getAdapter()).renewOrReturn(2,h.getTransaction_id(),h.getSerial_No(),h.getBook_id(),h.getDept(),
-                        h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books);
+                        h.getCourse(),h.getSemester(),holder.bar,holder.renew,holder.return_,holder.issue_date,holder.last_date,no_books,dues,holder.due);
                 }
         });
 
@@ -109,7 +120,7 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
     }
 
     boolean expired(String lastDate){
-        SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
         try {
             Date last_date = dateFormat.parse(lastDate);
             Date today = dateFormat.parse(dateFormat.format(new Date()));
@@ -124,12 +135,23 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
         }
         return true;
     }
+
+    String formatDate(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MMM-yyyy");
+        try {
+            date = dateFormat2.format(dateFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
+    }
     public class HistoryHolder extends RecyclerView.ViewHolder{
         TextView book_name;
         TextView author_name;
         TextView published;
         TextView booked;
-        TextView subject_name,issue_date,last_date;
+        TextView subject_name,issue_date,last_date,faculty,due,non_renew;
         ImageView book_image;
         Button renew,return_;
         ProgressBar bar;
@@ -146,6 +168,9 @@ public class HistoryContentAdapter extends   RecyclerView.Adapter<HistoryContent
             renew = convertView.findViewById(R.id.renew);
             return_ = convertView.findViewById(R.id.return_);
             bar = convertView.findViewById(R.id.bar);
+            non_renew = convertView.findViewById(R.id.nr);
+            due = convertView.findViewById(R.id.due);
+            faculty = convertView.findViewById(R.id.faculty);
         }
     }
 

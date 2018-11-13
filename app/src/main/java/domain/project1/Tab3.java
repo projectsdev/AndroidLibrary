@@ -94,7 +94,7 @@ public class Tab3 extends Fragment {
                                         boolean returnStatus = second.getBoolean("return_status");
                                         if(!returnStatus) {
                                             HistoryDetails hD = new HistoryDetails(Transaction_id, innerKey,second.getString("book_id"),second.getString("book_name"),
-                                                    second.getString("subject"),second.getString("author_name"), second.getString("pick_date"), second.getString("last_date"),
+                                                    second.getString("subject"),second.getString("author_name"), second.getString("pick_date"), second.getString("last_date"),second.getString("faculty"),
                                                     second.getInt("published"),1, second.getBoolean("renewable"), returnStatus,second.getString("dept"),second.getString("course"),second.getString("semester"));
                                             historyArray.add(hD);
                                         }
