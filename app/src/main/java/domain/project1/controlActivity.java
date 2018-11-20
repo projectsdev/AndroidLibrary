@@ -2,6 +2,7 @@ package domain.project1;
 
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -40,6 +41,9 @@ public class controlActivity extends AppCompatActivity {
     Toolbar toolbar;
     Context context;
     TabLayout tabLayout;
+    SharedPreferences preferences;
+    String student_name;
+    String branch;
     @Override
     public void onBackPressed() {
         if(navigationView.isShown()){
@@ -57,7 +61,11 @@ public class controlActivity extends AppCompatActivity {
         context = this;
         drawerLayout = findViewById(R.id.drawer_layout);
         navigationView = findViewById(R.id.nav_view);
-
+        preferences = getSharedPreferences("UserDetails",Context.MODE_PRIVATE);
+        TextView text =  (navigationView.getHeaderView(0)).findViewById(R.id.nav_header_text);
+        student_name = preferences.getString("name","Welcome");
+        branch = preferences.getString("course","Course") + '/' + preferences.getString("department","Dept");
+        text.setText("Logged as "+student_name+'\n'+branch);
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
@@ -84,7 +92,7 @@ public class controlActivity extends AppCompatActivity {
             }
         });
 
-        toolbar = (Toolbar) findViewById(R.id.toolbar);
+        toolbar =  findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         toolbar.setTitle("Library");
         actionBar = getSupportActionBar();
