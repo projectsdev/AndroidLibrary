@@ -57,7 +57,7 @@ public class HistoryContentAdapter extends RecyclerView.Adapter<HistoryContentAd
         holder.author_name.setText("Author : "+h.getAuthor());
         holder.published.setText("Published Year : "+h.getPublished_year());
         holder.booked.setText(Html.fromHtml("Booked : <strong>"+ h.getBooked_no() + "</strong>"));
-        holder.issue_date.setText(Html.fromHtml("Issued on: "+h.getIssue_date()));
+        holder.issue_date.setText(Html.fromHtml("Issued on: "+formatDate(h.getIssue_date())));
         if(h.getSubject().equals("not defined")){
             holder.subject_name.setVisibility(View.GONE);
         }

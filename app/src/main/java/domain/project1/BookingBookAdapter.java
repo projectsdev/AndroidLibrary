@@ -77,9 +77,12 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
         if(book.isRenewable()){
             holder.renewable.setText(Html.fromHtml("<font color=#4eb175>Renewable</font>"));
         }
-        else
+        else {
             holder.renewable.setText(Html.fromHtml("<font color=#ff0000>Non Renewable</font>"));
-
+            holder.add.setVisibility(View.INVISIBLE);
+            holder.sub.setVisibility(View.INVISIBLE);
+            holder.item_count.setVisibility(View.INVISIBLE);
+        }
         if(book.getSubject_name().equals("not defined")){
             holder.subject.setVisibility(View.GONE);
         }
@@ -193,7 +196,7 @@ public class BookingBookAdapter extends  RecyclerView.Adapter<BookingBookAdapter
             else
                 no_books.setVisibility(View.INVISIBLE);
             notifyDataSetChanged();
-            recyclerView.scheduleLayoutAnimation();
+//            recyclerView.scheduleLayoutAnimation();
 
         }
     };

@@ -64,8 +64,8 @@ public class renewOrReturn {
                             JSONObject object = new JSONObject(response);
                             int update = object.getInt("update");
                             if(update == 1){
-                                issue_date.setText(Html.fromHtml("Issued on : " +object.getString("startDate")));
-                                final_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +object.getString("finalDate")+"</font>"));
+                                issue_date.setText(Html.fromHtml("Issued on : " +formatDate(object.getString("startDate"))));
+                                final_date.setText(Html.fromHtml("Last Date : <font color=#8470ff>" +formatDate(object.getString("finalDate"))+"</font>"));
                                 bar.setVisibility(View.GONE);
                                 renew.setVisibility(View.VISIBLE);
                                 return_.setVisibility(View.VISIBLE);
@@ -167,5 +167,15 @@ public class renewOrReturn {
             e.printStackTrace();
         }
         return true;
+    }
+    String formatDate(String date){
+        SimpleDateFormat dateFormat = new SimpleDateFormat("MM/dd/yyyy");
+        SimpleDateFormat dateFormat2 = new SimpleDateFormat("dd-MMM-yyyy");
+        try {
+            date = dateFormat2.format(dateFormat.parse(date));
+        } catch (ParseException e) {
+            e.printStackTrace();
+        }
+        return date;
     }
     }
